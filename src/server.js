@@ -71,36 +71,14 @@ wsServer.on("connection",socket=>{
         socket.to(room).emit("new_message",`${socket.nickname}: ${msg}`);
         done();
     })
-    socket.on("nickname", nickname => {
+    socket.on("nickname", (nickname, room, done) => {
+        socket.to(room).emit("nickname",`${socket.nickname} changed to ${nickname}`);
         socket["nickname"] = nickname;
+        done();
     })
 
 });
-/*const sockets = [];
-const wss = new WebSocket.Server({ server });
-wss.on("connection", (socket)=>{
-    sockets.push(socket);
-    socket["nickname"] = "Anon";
-    console.log("Connect to Browser");
-    socket.on("close",()=>{
-        console.log("Disconnected from the Browser");
-    });
 
-    socket.on("message",(msg)=>{
-        const message = JSON.parse(msg);
-        switch(message.type){
-            case "new_message":
-                sockets.forEach(aSocket =>
-                    aSocket.send(`${socket.nickname}: ${message.payload}`));
-                break;
-            case "nickname" : 
-                socket["nickname"] = message.payload;
-                break;
-            
-        }
-    }); 
-});
-*/
 
 httpServer.listen(3000,handleListen);
 

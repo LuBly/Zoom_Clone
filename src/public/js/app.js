@@ -27,7 +27,9 @@ function handleMessageSubmit(event){
 function handleNicknameSubmit(event){
     event.preventDefault();
     const input = room.querySelector("#name input");
-    socket.emit("nickname",input.value);
+    socket.emit("nickname", input.value, roomName, ()=>{
+        addMessage(`you change nickname to ${input.value}`);
+    });
 }
 
 function showRoom(){
@@ -63,6 +65,7 @@ socket.on("bye",(left, newCount)=>{
 });
 
 socket.on("new_message", addMessage);
+socket.on("nickname", addMessage);
 
 socket.on("room_change", (rooms)=>{
     const roomList = welcome.querySelector("ul");
